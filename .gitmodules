@@ -1,0 +1,9 @@
+[submodule "SOURCES/nginx-x-rid-header"]
+	path = SOURCES/nginx-x-rid-header
+	url = https://github.com/newobj/nginx-x-rid-header
+[submodule "SOURCES/nginx-auth-ldap"]
+	path = SOURCES/nginx-auth-ldap
+	url = https://github.com/kvspb/nginx-auth-ldap
+[submodule "SOURCES/nginx-more-headers"]
+	path = SOURCES/nginx-more-headers
+	url = https://github.com/openresty/headers-more-nginx-module

@@ -12,7 +12,9 @@ Requires(pre): shadow-utils
 Requires: initscripts >= 8.36
 Requires(post): chkconfig
 Requires: openssl
-BuildRequires: openssl-devel
+Requires: uuid
+BuildRequires: openssl-devel openldap-devel
+BuildRequires: uuid-devel
 %endif
 
 %if 0%{?rhel}  == 6
@@ -21,21 +23,27 @@ Requires(pre): shadow-utils
 Requires: initscripts >= 8.36
 Requires(post): chkconfig
 Requires: openssl >= 1.0.1
+Requires: uuid
 BuildRequires: openssl-devel >= 1.0.1
+BuildRequires: openldap-devel
+BuildRequires: uuid-devel
 %endif
 
 %if 0%{?rhel}  == 7
 Group: System Environment/Daemons
-Requires(pre): shadow-utils 
-Requires: systemd 
-Requires: openssl >= 1.0.1 
-BuildRequires: systemd 
+Requires(pre): shadow-utils
+Requires: systemd
+Requires: openssl >= 1.0.1
+Requires: uuid
+BuildRequires: systemd
 BuildRequires: openssl-devel >= 1.0.1
+BuildRequires: openldap-devel
+BuildRequires: uuid-devel
 %endif
 
 %if 0%{?suse_version}
 Group: Productivity/Networking/Web/Servers
-BuildRequires: libopenssl-devel 
+BuildRequires: libopenssl-devel
 Requires(pre): pwdutils
 %endif
 
@@ -44,7 +52,7 @@ Requires(pre): pwdutils
 Summary: High performance web server
 Name: nginx
 Version: 1.4.7
-Release: 2%{?dist}.ngx
+Release: 3%{?dist}.ngx
 Vendor: nginx inc.
 URL: http://nginx.org/
 
@@ -56,8 +64,6 @@ Source4: nginx.conf
 Source5: nginx.vh.default.conf
 Source6: nginx.vh.example_ssl.conf
 Source7: nginx.suse.init
-Source8: https://github.com/kvspb/nginx-auth-ldap/archive/master.zip
-Source9: headers-more-nginx-module-0.25.tar.gz
 
 License: 2-clause BSD-like license
 
@@ -80,8 +86,9 @@ Not stripped version of nginx built with the debugging log support.
 
 %prep
 %setup -q
-%setup -D -q -T -b 8
-%setup -D -q -T -b 9
+%{__cp} -r %{_sourcedir}/nginx-auth-ldap %{_builddir}
+%{__cp} -r %{_sourcedir}/nginx-more-headers %{_builddir}
+%{__cp} -r %{_sourcedir}/nginx-x-rid-header %{_builddir}
 
 %build
 ./configure \
@@ -118,8 +125,10 @@ Not stripped version of nginx built with the debugging log support.
         --with-ipv6 \
         --with-debug \
         --with-cc-opt="%{optflags} $(pcre-config --cflags)" \
-	--add-module=../nginx-auth-ldap-master \
-	--add-module=../headers-more-nginx-module-0.25 \
+        --with-ld-opt=-lossp-uuid \
+	      --add-module=../nginx-auth-ldap \
+	      --add-module=../nginx-more-headers \
+        --add-module=../nginx-x-rid-header \
         $*
 make %{?_smp_mflags}
 %{__mv} %{_builddir}/%{name}-%{version}/objs/nginx \
@@ -157,8 +166,10 @@ make %{?_smp_mflags}
         --with-file-aio \
         --with-ipv6 \
         --with-cc-opt="%{optflags} $(pcre-config --cflags)" \
-	--add-module=../nginx-auth-ldap-master \
-	--add-module=../headers-more-nginx-module-0.25 \
+        --with-ld-opt=-lossp-uuid \
+	      --add-module=../nginx-auth-ldap \
+	      --add-module=../nginx-more-headers \
+        --add-module=../nginx-x-rid-header \
         $*
 make %{?_smp_mflags}
 
