@@ -51,8 +51,8 @@ Requires(pre): pwdutils
 
 Summary: High performance web server
 Name: nginx
-Version: 1.4.7
-Release: 3%{?dist}.ngx
+Version: 1.7.1
+Release: 1%{?dist}.ngx
 Vendor: nginx inc.
 URL: http://nginx.org/
 
