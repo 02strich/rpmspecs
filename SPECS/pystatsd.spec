@@ -76,5 +76,5 @@ rm -rf %{buildroot}
 * Fri Mar 02 2012 Justin Burnham <jburnham@mediatemple.net> - 0.1.7-2
 - Add python-argparse requires.
 - Add init file to MANIFEST.in for setup.py sdist.
-* Thu Oct 07 2011 Sharif Nassar <sharif@mediatemple.net> - 0.1.7-1
+* Fri Oct 07 2011 Sharif Nassar <sharif@mediatemple.net> - 0.1.7-1
 - Initial package
